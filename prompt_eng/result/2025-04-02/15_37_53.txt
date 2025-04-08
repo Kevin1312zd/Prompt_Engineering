@@ -1,0 +1,47 @@
+2025-04-02 15:37:53,605 - 15_37_53.txt - INFO - -------------------------start new experiment-------------------------------
+2025-04-02 15:40:57,497 - 15_37_53.txt - INFO - 
+2025-04-02 15:40:57,498 - 15_37_53.txt - INFO - 用户输入的原始prompt0是【 I want to query a certain material card in MSC Nastran BDF file. 】
+
+2025-04-02 15:40:57,498 - 15_37_53.txt - INFO - optimizer基于prompt0生成的多个提示词包括:
+
+2025-04-02 15:40:57,498 - 15_37_53.txt - INFO - 【 Prompt:  
+"Explain how to locate and extract specific material property data from a Material Card (e.g., MAT1, MAT2) in an MSC Nastran BDF file. Include:  
+1. Identification criteria (material ID, card type, or specific properties like E/G/RHO)  
+2. Required BDF syntax patterns  
+3. Example workflow for querying nonlinear material parameters  
+4. Tools/commands (e.g., Python regex, NASTRAN parser libraries)  
+5. Error handling for legacy formats  
+Provide a sample solution for finding all MAT3 cards with temperature-dependent properties in a multi-step analysis."  
+
+**Rationale**:  
+1. **Specificity Framework**: Forces explicit addressing of BDF syntax, material types, and extraction methods  
+2. **Example-Driven**: Anchors the technical response with concrete use cases  
+3. **Layered Query**: Separates identification/parsing/validation tasks using Bloom's Taxonomy  
+4. **Error Anticipation**: Explicitly requests boundary-case handling for real-world files  
+5. **Toolchain Context**: Bridges between file inspection and programmatic implementation  
+
+This structure aligns with finite element analysis workflows while preventing ambiguous interpretations of "query" (manual inspection vs automated extraction). 】
+
+2025-04-02 15:40:57,507 - 15_37_53.txt - INFO - 【 Prompt:  
+"Context: You are working with an MSC Nastran Bulk Data File (BDF) containing finite element model definitions. Your task is to locate and interpret material property definitions.  
+
+Query: Provide a step-by-step method to:  
+1. Identify the specific material card (e.g., MAT1, MAT2, MAT9) by material ID or name  
+2. Extract its full parameter set (elastic modulus, density, etc.)  
+3. Handle duplicate material IDs if present  
+
+Include an example BDF snippet showing a MAT1 card with ID 101 and explain how to parse its components.  
+Additional Considerations:  
+- Address how to verify material card validity  
+- Mention common pitfalls when querying legacy BDF formats"  
+
+This prompt combines specificity (material types, ID example), structural clarity (numbered steps), and error-aware design (duplicates, legacy formats). It uses the "chunking" technique to break the task into logical components and incorporates anti-goals by explicitly addressing potential pitfalls. 】
+
+2025-04-02 15:41:55,201 - 15_37_53.txt - INFO - 经过evaluator评估得到的最优提示词是【 "Explain how to locate and extract specific material property data from a Material Card (e.g., MAT1, MAT2) in an MSC Nastran BDF file. Include:  
+1. Identification criteria (material ID, card type, or specific properties like E/G/RHO)  
+2. Required BDF syntax patterns  
+3. Example workflow for querying nonlinear material parameters  
+4. Tools/commands (e.g., Python regex, NASTRAN parser libraries)  
+5. Error handling for legacy formats  
+Provide a sample solution for finding all MAT3 cards with temperature-dependent properties in a multi-step analysis." 】
+

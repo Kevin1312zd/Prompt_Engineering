@@ -1,0 +1,386 @@
+Role Prompting Tutorial
+
+Overview
+
+This tutorial explores the concept of role prompting in Al language models, focusing
+on how to assign specific roles to Al models and craft effective role descriptions.
+We'll use OpenAl's GPT model and the LangChain library to demonstrate these
+techniques.
+
+Motivation
+
+Role prompting is a powerful technique in prompt engineering that allows us to guide
+Al models to adopt specific personas or expertise. This approach can significantly
+enhance the quality and relevance of Al-generated responses, making them more
+suitable for specific tasks or domains.
+
+Key Components
+
+1. Role Assignment: Techniques for assigning roles to Al models
+
+2. Role Description Crafting: Strategies for creating effective and detailed role
+descriptions
+
+3. Context Setting: Methods to provide necessary background information for the
+role
+
+4. Task Specification: Approaches to clearly define tasks within the assigned role
+
+Method Details
+
+Our approach involves the following steps:
+
+Setting up the environment with necessary libraries (OpenAl, LangChain)
+Creating role-based prompts using LangChain's PromptTemplate
+Assigning roles to the Al model through carefully crafted prompts
+Demonstrating how different roles affect the model's responses
+
+ao PF WN >
+
+Exploring techniques for refining and improving role descriptions
+
+We'll use various examples to illustrate how role prompting can be applied in different
+scenarios, such as technical writing, creative storytelling, and professional advice-
+
+giving.
+
+Conclusion
+In [1]:
+
+In [2]:
+
+In [3]:
+
+By the end of this tutorial, you will have a solid understanding of role prompting
+techniques and how to effectively implement them using OpenAl and LangChain.
+You'll be equipped with the skills to craft compelling role descriptions and leverage
+them to enhance Al model performance in various applications.
+
+Setup
+
+First, let's import the necessary libraries and set up our environment.
+
+import os
+from langchain_openai import ChatOpenAI
+from langchain.prompts import PromptTemplate
+
+from dotenv import load_dotenv
+load_dotenv()
+
+# Set up OpenAI API key
+os.environ["OPENAI_API_KEY"] = os.getenv( 'OPENAI_API_KEY')
+
+# Initialize the language model
+llm = ChatOpenAI (model="gpt-40-mini")
+
+Basic Role Assignment
+
+Let's start with a simple example of role assignment. We'll create a prompt that
+assigns the role of a technical writer to the Al model.
+
+tech_writer_prompt = PromptTemplate(
+input_variables=["topic"],
+template="""You are a technical writer specializing in creating clea
+Your task is to write a brief explanation of {topic} for a user manu:
+Please provide a 2-3 sentence explanation that is easy for non-techn
+
+)
+
+chain = tech_writer_prompt | llm
+response = chain.invoke({"topic": "cloud computing"})
+print(response.content)
+
+Cloud computing is a technology that allows you to store and access data a
+nd applications over the internet instead of your computer's hard drive. T
+his means you can use software and files from anywhere, at any time, as lo
+ng as you have an internet connection. It offers flexibility, scalability,
+and convenience for both personal and professional use.
+
+Crafting Effective Role Descriptions
+
+Now, let's explore how to craft more detailed and effective role descriptions. We'll
+create a prompt for a financial advisor role with a more comprehensive description.
+In [4]:
+
+financial_advisor_prompt = PromptTemplate(
+input_variables=["client_situation"],
+template="""You are a seasoned financial advisor with over 20 years |
+You have a track record of helping clients from diverse backgrounds
+Your approach is characterized by:
+1. Thorough analysis of each client's unique financial situation
+2. Clear and jargon-free communication of complex financial concepts
+3. Ethical considerations in all recommendations
+4. A focus on long-term financial health and stability
+
+Given the following client situation, provide a brief (3-4 sentences
+{client_situation}
+
+Your response should reflect your expertise and adhere to your chara
+
+)
+
+chain = financial_advisor_prompt | 1llm
+response = chain.invoke({"client_situation": "A 35-year-old professional
+print(response.content)
+
+Given your solid income and savings, the first step is to establish a reti
+rement plan. Consider contributing to a tax-advantaged retirement account,
+like a 4@1(k) or an IRA, to take advantage of compounding interest and pot
+ential employer match. Additionally, aim to build an emergency fund coveri
+ng 3-6 months of living expenses to enhance your financial stability. Last
+ly, regularly review and adjust your investment strategy to align with you
+r long-term financial goals, ensuring a balanced approach to risk and grow
+th.
+
+Comparing Responses with Different Roles
+
+To demonstrate how different roles can affect the Al's responses, let's create
+prompts for three different roles and compare their outputs on the same topic
+
+roles = [
+("Scientist", "You are a research scientist specializing in climate
+("Teacher", "You are a middle school science teacher. Explain the fo
+("Journalist", "You are a journalist writing for a popular science m
+
+]
+topic = "The greenhouse effect"
+
+for role, description in roles:
+
+role_prompt = PromptTemplate(
+input_variables=["topic"],
+template=f''{description} {{topic}}"
+
+)
+
+chain = role_prompt | 1lm
+
+response = chain. invoke({"topic": topic})
+
+print(f'"\n{role}'s explanation: \n")
+
+print(response.content)
+
+print("-" « 5Q)
+
+Scientist's explanation:
+
+The greenhouse effect is a natural process that warms the Earth’s surface.
+It occurs when the Sun’s energy reaches the Earth’s atmosphere — some of t
+his energy is reflected back to space and the rest is absorbed and re-radi
+ated by greenhouse gases.
+
+Here's a more detailed breakdown of the process:
+
+1. **Solar Radiation**: The Sun emits energy in the form of solar radiatio
+n, which includes visible light, ultraviolet light, and infrared radiatio
+
+n. When this energy reaches Earth, about 30% is reflected back into space
+
+by clouds, atmospheric particles, and reflective surfaces (like ice and sn
+ow). The remaining 70% is absorbed by the Earth's surface (land and ocean
+
+s), which warms the surface.
+
+2. **Re-radiation of Heat*x*x: The Earth, having absorbed solar energy, warm
+s up and subsequently emits energy back into the atmosphere in the form of
+infrared radiation (heat). This is a crucial step as it transforms solar e
+nergy into thermal energy.
+
+3. *kGreenhouse Gases**k: Certain gases in the atmosphere, known as greenho
+use gases (GHGs), trap some of the outgoing infrared radiation. The most s
+ignificant greenhouse gases include carbon dioxide (C02), methane (CHa), n
+itrous oxide (N20), and water vapor (H20). These gases have molecular stru
+ctures that allow them to absorb and re-radiate infrared radiation, effect
+ively trapping heat within the atmosphere.
+
+4. *kEnhanced Greenhouse Effectx*x: While the greenhouse effect is a natura
+Ll and essential process that maintains Earth's temperature at a level cond
+ucive to life, human activities, particularly the burning of fossil fuels,
+deforestation, and industrial processes, have led to an increase in the co
+ncentration of greenhouse gases. This enhanced greenhouse effect results i
+n more heat being retained in the atmosphere, leading to global warming an
+d climate change.
+
+5. **kClimate Impacts**: The increase in average global temperatures affect
+s climate systems, leading to more extreme weather events, rising sea leve
+ls, and disruptions to ecosystems and biodiversity.
+
+In summary, the greenhouse effect is a fundamental component of the Earth’
+s climate system, facilitating a habitable environment by regulating tempe
+rature. However, anthropogenic increases in greenhouse gas concentrations
+
+are intensifying this natural effect, resulting in significant environment
+al changes and challenges.
+
+Teacher's explanation:
+
+Sure! Let’s imagine the Earth as a big greenhouse, which is a special buil
+ding that helps plants grow by keeping them warm and cozy. Here's how the
+greenhouse effect works:
+
+1. **Sunshinex*: The Sun shines down on the Earth, sending light and warmt
+h our way. This is like the sunlight coming into a greenhouse.
+
+2. **Earth’s Surfacekk: When the sunlight hits the ground, buildings, and
+even the ocean, it warms them up. Just like how the inside of a greenhouse
+gets warm when the sun shines on it.
+
+3. *kHeat Trapped**: Now, the Earth doesn’t just keep all that heat. Some
+of it tries to escape back into space. However, there are certain gases in
+our atmosphere, called greenhouse gases (like carbon dioxide and methane),
+that act like a blanket. They trap some of this heat, keeping the Earth wa
+rm enough for us to live.
+4. **Balance is Key*x*: This natural process is important because it keeps
+our planet at a temperature that's just right for plants, animals, and us
+humans! Without the greenhouse effect, Earth would be way too cold.
+
+5. *kToo Much of a Good Thing**: But here’s the catch: if we add too many
+greenhouse gases (from things like cars, factories, and cutting down tree
+s), it makes the blanket too thick. This causes the Earth to warm up too m
+uch, leading to climate change. That's why we need to be careful about how
+we treat our planet!
+
+So, the greenhouse effect is like having a warm blanket around our Earth,
+helping keep it cozy, but we need to make sure it’s not too thick!
+
+Journalist's explanation:
+*kUnderstanding the Greenhouse Effect: Nature's Cozy Blanketxx
+
+Imagine stepping outside on a chilly winter day, wrapping yourself in a wa
+rm blanket to stave off the cold. This is similar to what our planet exper
+iences through a natural phenomenon known as the greenhouse effect. While
+it plays a crucial role in maintaining life as we know it, understanding i
+ts mechanics is key to grasping the challenges our world faces today.
+
+So, what exactly is the greenhouse effect? At its core, it’s a process tha
+t helps regulate Earth's temperature, ensuring it’s just right for plants,
+animals, and humans. Here’s how it works:
+
+1. **kSunshine and Absorption**: The journey begins with the Sun, which bat
+hes our planet in energy. When sunlight reaches Earth, some of it is absor
+bed by the land and oceans, warming the surface. Think of this as the Eart
+h soaking up warmth like a sponge.
+
+2. *kRadiation Back to Space*x*«: After absorbing this energy, the Earth doe
+sn’t keep all the heat. Instead, it radiates some of it back into space in
+the form of infrared radiation (a type of heat). It’s like that sponge, on
+ce full, starts to release moisture back into the air.
+
+3. **kThe Greenhouse Gases*xx: Here’s where the greenhouse effect truly come
+s into play. Our atmosphere is not just empty air; it contains a mix of ga
+ses, some of which are known as greenhouse gases—primarily carbon dioxide
+(CO2), methane (CH4), and water vapor. These gases are like the insulating
+layers of your cozy blanket. They trap some of the outgoing infrared radia
+tion, preventing it from escaping back into space. This process keeps our
+planet warm enough to support life.
+
+4. *kThe Balance*x*: Under natural conditions, this balance is maintained.
+
+The amount of heat entering the atmosphere is roughly equal to the amount
+
+being trapped and radiated back out. This equilibrium has allowed Earth to
+maintain a stable climate for thousands of years.
+
+However, human activities—such as the burning of fossil fuels, deforestati
+on, and industrial processes—have tipped this delicate balance. By releasi
+ng additional greenhouse gases into the atmosphere, we enhance the greenho
+use effect, causing more heat to be trapped. This is akin to adding extra
+layers to your blanket when you’re already warm; soon, you’re too hot.
+
+The consequences of this intensified greenhouse effect are profound. We ar
+e witnessing rising global temperatures, melting ice caps, and shifting we
+ather patterns, all of which contribute to climate change. These changes c
+In [5]:
+
+an lead to severe weather events, rising sea levels, and disruptions to ec
+osystems, impacting food security, water supply, and human health.
+
+Understanding the greenhouse effect is crucial not just for grasping clima
+te science, but also for motivating action. As we learn more about how our
+actions contribute to this phenomenon, it becomes clear that we have the p
+ower to influence the outcome. By reducing our carbon footprint—through re
+newable energy, energy efficiency, and sustainable practices—we can help r
+estore balance to our planet’s climate system.
+
+In essence, the greenhouse effect is a reminder of the intricate connectio
+ns within our environment. It highlights the delicate balance we must main
+tain to ensure that Earth remains a hospitable home for all its inhabitant
+s. SO, aS we wrap ourselves in our metaphorical blankets, let’s do so with
+mindfulness, ensuring we don’t overdo it and keep our planet’s temperature
+just right.
+
+Refining Role Descriptions
+
+Let's explore how to refine role descriptions for more specific outcomes. We'll use a
+creative writing example, focusing on different storytelling styles.
+
+storyteller_prompt = PromptTemplate(
+input_variables=["style", "scenario"],
+template="""You are a master storyteller known for your ability to a
+Your current task is to write in the style of {style}.
+Key characteristics of this style include:
+1. {style_char1}
+2. {style_char2}
+3. {style_char3}
+
+Write a short paragraph (3-4 sentences) in this style about the foll
+{scenario}
+
+Ensure your writing clearly reflects the specified style."
+)
+
+styles = [
+{
+"name": "Gothic horror",
+"chari": "Atmospheric and ominous descriptions",
+"char2": "Themes of decay, death, and the supernatural",
+"char3": "Heightened emotions and sense of dread"
+},
+{
+"name": "Minimalist realism",
+"chari": "Sparse, concise language",
+"char2": '"Focus on everyday, ordinary events",
+"char3": "Subtle implications rather than explicit statements"
+}
+]
+scenario = "A person enters an empty house at twilight"
+
+for style in styles:
+chain = storyteller_prompt | llm
+response = chain. invoke({
+"style": style["name"],
+"style_char1": style["char1"],
+"style_char2": style["char2"],
+"style_char3": style["char3"l,
+"scenario": scenario
+
+})
+
+print(f'\n{style['name']} version: \n")
+
+print(response.content)
+
+print("-" « 5Q)
+
+Gothic horror version:
+
+As twilight draped its somber veil over the forsaken dwelling, the air thi
+ckened with the scent of mold and memories long buried beneath layers of d
+ust and despair. The door creaked open with a mournful groan, revealing a
+cavernous interior, where shadows danced like specters in the fading ligh
+t, whispering secrets of the long-dead inhabitants. Each step echoed omino
+usly on the rotting floorboards, a grim reminder of the decay that had cla
+imed both structure and spirit, while a chill snaked around the intruder’s
+heart, tightening with the realization that they were not alone. In that s
+uffocating gloom, the very walls seemed to pulse with a malignant energy,
+as if the house itself hungered for a soul to ensnare in its eternal grasp
+of sorrow.
+
+Minimalist realism version:
+
+The door creaked as she pushed it open, the sound swallowed by the stillne
+ss. Shadows pooled in corners, stretching across the faded floorboards. Sh
+e paused, breath caught in the quiet, the air thick with dust and memorie
+s. Outside, the sky deepened to indigo, while inside, time seemed to linge
+r, waiting.

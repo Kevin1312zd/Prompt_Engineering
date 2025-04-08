@@ -1,0 +1,475 @@
+Prompt Chaining and Sequencing Tutorial
+
+Overview
+
+This tutorial explores the concepts of prompt chaining and sequencing in the context
+of working with large language models. We'll use OpenAl's GPT models and the
+LangChain library to demonstrate how to connect multiple prompts and build logical
+flows for more complex Al-driven tasks.
+
+Motivation
+
+As Al applications become more sophisticated, there's often a need to break down
+complex tasks into smaller, manageable steps. Prompt chaining and sequencing allow
+us to guide language models through a series of interrelated prompts, enabling more
+structured and controlled outputs. This approach is particularly useful for tasks that
+require multiple stages of processing or decision-making.
+
+Key Components
+
+1. Basic Prompt Chaining: Connecting the output of one prompt to the input of
+another.
+
+2. Sequential Prompting: Creating a logical flow of prompts to guide the Al
+through a multi-step process.
+
+3. Dynamic Prompt Generation: Using the output of one prompt to dynamically
+generate the next prompt.
+
+4. Error Handling and Validation: Implementing checks and balances within the
+prompt chain.
+
+Method Details
+
+We'll start by setting up our environment with the necessary libraries. Then, we'll
+explore basic prompt chaining by connecting two simple prompts. We'll move on to
+more complex sequential prompting, where we'll guide the Al through a multi-step
+analysis process. Next, we'll demonstrate how to dynamically generate prompts
+based on previous outputs. Finally, we'll implement error handling and validation
+techniques to make our prompt chains more robust.
+
+Throughout the tutorial, we'll use practical examples to illustrate these concepts,
+such as a multi-step text analysis task and a dynamic question-answering system.
+
+Conclusion
+In [3]:
+
+In [2]:
+
+By the end of this tutorial, you'll have a solid understanding of how to implement
+prompt chaining and sequencing in your Al applications. These techniques will enable
+you to tackle more complex tasks, improve the coherence and relevance of Al-
+generated content, and create more interactive and dynamic Al-driven experiences.
+
+Setup
+
+Let's start by importing the necessary libraries and setting up our environment.
+
+import os
+import re
+
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from langchain.prompts import PromptTemplate
+
+# Load environment variables
+load_dotenv()
+
+# Set up OpenAI API key
+os.environ["OPENAI_API_KEY"] = os.getenv( 'OPENAI_API_KEY')
+
+# Initialize the language model
+llm = ChatOpenAI (model="gpt-40-mini")
+
+Basic Prompt Chaining
+
+Let's start with a simple example of prompt chaining. We'll create two prompts: one
+to generate a short story, and another to summarize it.
+
+# Define prompt templates
+story_prompt = PromptTemplate(
+
+input_variables=["'genre"],
+
+template="Write a short {genre} story in 3-4 sentences."
+)
+
+summary_prompt = PromptTemplate(
+input_variables=["'story"],
+template="Summarize the following story in one sentence: \n{story}"
+
+)
+
+# Chain the prompts
+def story_chain(genre):
+"""Generate a story and its summary based on a given genre.
+
+Args:
+genre (str): The genre of the story to generate.
+
+Returns:
+tuple: A tuple containing the generated story and its summary.
+
+story = (story_prompt | 1llm).invoke({"genre": genre}).content
+In [4]:
+
+summary = (summary_prompt | 1llm).invoke({"story': story}).content
+return story, summary
+
+# Test the chain
+
+genre = "science fiction"
+
+story, summary = story_chain(genre)
+print(f'Story: {story}\n\nSummary: {summary}")
+
+Story: In the year 2147, humanity discovered a way to communicate with the
+ir future selves through time-locked messages sent via quantum entanglemen
+t. When Ava received a cryptic warning from her future self, she struggled
+to decipher its meaning: "Trust the shadow, not the light." As a solar fla
+re threatened to wipe out Earth's power grid, she realized the warning was
+about a hidden faction that thrived in the chaos. Embracing the darkness,
+Ava united the underground resistance, ensuring that humanity would not ju
+st survive, but rise anew from the ashes.
+
+Summary: In 2147, Ava deciphers a cryptic warning from her future self abo
+ut a hidden faction amidst a solar flare crisis, leading her to unite an u
+nderground resistance that helps humanity not only survive but thrive in t
+he chaos.
+
+Sequential Prompting
+
+Now, let's create a more complex sequence of prompts for a multi-step analysis task.
+We'll analyze a given text for its main theme, tone, and key takeaways.
+
+# Define prompt templates for each step
+theme_prompt = PromptTemplate(
+
+input_variables=["text"],
+
+template="Identify the main theme of the following text:\n{text}"
+)
+
+tone_prompt = PromptTemplate(
+
+input_variables=["text"],
+
+template="Describe the overall tone of the following text:\n{text}"
+)
+
+takeaway_prompt = PromptTemplate(
+input_variables=["text", "theme", "tone"],
+
+template="Given the following text with the main theme '{theme}' and
+)
+
+def analyze_text(text):
+"""'Perform a multi-step analysis of a given text.
+
+Args:
+text (str): The text to analyze.
+
+Returns:
+
+dict: A dictionary containing the theme, tone, and key takeaways
+theme = (theme_prompt | 1lm).invoke({"text": text}).content
+tone = (tone_prompt | 1llm).invoke({"text": text}).content
+takeaways = (takeaway_prompt | 1lm)-invoke({"text": text, "theme": t
+return {"theme": theme, "tone": tone, "takeaways": takeaways}
+
+# Test the sequential prompting
+In [5]:
+
+sample_text = "The rapid advancement of artificial intelligence has spar
+
+analysis = analyze_text(sample_text)
+for key, value in analysis.items():
+print(f''{key.capitalize()}: {value}\n")
+
+Theme: The main theme of the text is the duality of artificial intelligenc
+e advancements, highlighting both the potential benefits and ethical conce
+rns associated with its development. It emphasizes the need for cautious a
+nd responsible approaches to harness AI's advantages while addressing issu
+es like privacy, job displacement, and potential misuse.
+
+Tone: The overall tone of the text is cautious and balanced. It expresses
+a sense of excitement about the potential benefits of artificial intellige
+nce, while simultaneously acknowledging the concerns and ethical dilemmas
+it presents. The emphasis on the need for careful consideration and foresi
+ght reflects a responsible and thoughtful approach to the development of A
+I, highlighting both optimism and wariness.
+
+Takeaways: Here are the key takeaways based on the provided theme and ton
+e:
+
+1. **Duality of AI Advancements**: The text highlights the dual nature of
+artificial intelligence, presenting both significant benefits and serious
+ethical concerns.
+
+2. **Benefits of AI**: AI has the potential to revolutionize various indus
+tries and enhance daily life, showcasing its promise for positive change.
+
+3. **kEthical Concerns**: Important issues arise alongside AI advancements,
+including privacy violations, job displacement, and the risk of misuse, wh
+ich must be addressed.
+
+4. **kNeed for Caution**: A cautious and responsible approach is essential
+in AI development to ensure that the technology is harnessed effectively w
+hile mitigating its risks.
+
+5. **kBalanced Perspectivekx: The text maintains a balanced tone that refle
+cts both excitement for AI's possibilities and wariness about its implicat
+ions, advocating for thoughtful consideration in its advancement.
+
+6. *kImportance of Foresight**x: Emphasizes the necessity of foresight in p
+lanning and regulating AI to maximize benefits and minimize potential har
+m.
+
+7. **kCall to Action**: Encourages stakeholders to engage in responsible pr
+actices that prioritize ethical considerations in the pursuit of AI innova
+tion.
+
+Dynamic Prompt Generation
+
+In this section, we'll create a dynamic question-answering system that generates
+follow-up questions based on previous answers.
+
+# Define prompt templates
+answer_prompt = PromptTemplate(
+input_variables=["'question"],
+template="Answer the following question concisely: \n{question}"
+
+)
+
+follow_up_prompt = PromptTemplate(
+input_variables=["question", "“answer"],
+template="Based on the question '{question}' and the answer '{answer
+
+)
+
+def dynamic_ga(initial_question, num_follow_ups=3):
+"""Conduct a dynamic Q&A session with follow-up questions.
+
+Args:
+initial_question (str): The initial question to start the Q&A se
+num_follow_ups (int): The number of follow-up questions to gener
+
+Returns:
+
+list: A list of dictionaries containing questions and answers.
+qa_chain = []
+current_question = initial_question
+
+for _ in range(num_follow_ups + 1): # +1 for the initial question
+answer = (answer_prompt | llm).invoke({"question": current_quest
+gqa_chain.append({"question": current_question, "answer": answer}
+
+if _ < num_follow_ups: # Generate follow-up for all but the las
+current_question = (follow_up_prompt | 11m) .invoke({"questio
+
+return ga_chain
+
+# Test the dynamic Q&A system
+initial_question = "What are the potential applications of quantum compu
+qa_session = dynamic_qa(initial_question)
+
+for i, qa in enumerate(qa_session):
+print(f'Q{i+1}: {qal['question'] }")
+print(f'A{i+1}: {qal['answer']}\n")
+
+Q1: What are the potential applications of quantum computing?
+Al: Potential applications of quantum computing include:
+
+1. **Cryptography**: Breaking classical encryption methods and developing
+quantum-secure communication.
+
+2. *kOptimization**: Solving complex optimization problems in logistics, f
+inance, and supply chain management.
+
+3. **kDrug Discovery**: Simulating molecular interactions for faster pharma
+ceutical development.
+
+4. **Material Sciencek*: Designing new materials with specific properties
+at the quantum level.
+
+5. *kArtificial Intelligencex*: Enhancing machine learning algorithms and
+data analysis.
+
+6. **kFinancial Modeling**: Improving risk assessment and portfolio optimiz
+ation.
+
+7. *kWeather Forecasting**: Enhancing predictive models for climate and we
+ather patterns.
+
+8. **kQuantum Simulation**: Studying complex quantum systems in physics and
+chemistry.
+
+These applications leverage quantum superposition and entanglement to perf
+orm calculations beyond the capability of classical computers.
+Q2: What are the challenges and limitations currently facing the developme
+nt and implementation of quantum computing technologies?
+
+A2: The challenges and limitations currently facing the development and im
+plementation of quantum computing technologies include:
+
+1. *kTechnical Complexity**: Building and maintaining quantum computers is
+highly complex due to the need for precise control of qubits and error cor
+rection.
+
+2. *kDecoherencex*x: Qubits are sensitive to their environment, leading to
+loss of quantum information through decoherence, which limits operational
+time.
+
+3. **Scalability**: Increasing the number of qubits while maintaining cohe
+rence and connection quality is a significant challenge.
+
+4. **Error Rates**: Quantum gates have higher error rates compared to clas
+sical counterparts, necessitating robust error correction methods.
+
+5. *kResource Requirements**: Quantum computers often require extreme cond
+itions, such as ultra-low temperatures, making them expensive and difficul
+t to operate.
+
+6. **Algorithm Development**: There is a Limited number of algorithms that
+can effectively leverage quantum computing advantages, and more research i
+s needed to develop practical applications.
+
+7. *kWorkforce and Knowledge Gapx«x: A shortage of skilled professionals wi
+th expertise in quantum computing hampers progress and innovation.
+
+8. **kIntegration with Classical Systemsx«: Developing efficient hybrid sys
+tems that can effectively utilize both quantum and classical computing res
+ources is still an ongoing challenge.
+
+9. *kRegulatory and Ethical Concernsx*x: The potential implications of quan
+tum computing on security and privacy raise regulatory and ethical questio
+ns that need to be addressed.
+
+These challenges hinder the widespread adoption and realization of quantum
+computing's full potential.
+
+Q3: What strategies or advancements are being explored to overcome the cha
+Llenges and limitations in quantum computing technology?
+
+A3: To overcome the challenges and limitations in quantum computing techno
+logy, several strategies and advancements are being explored, including:
+
+1. *kError Correctionx*x: Developing robust quantum error correction codes
+to mitigate the effects of decoherence and noise.
+
+2. *kQuantum Supremacyx**: Demonstrating quantum advantage with specialized
+algorithms to solve specific problems faster than classical computers.
+
+3. *kMaterial Sciencek*k: Researching new materials for qubits that have im
+proved coherence times and operational stability, such as topological qubi
+ts.
+
+4. **Hybrid Systems**: Integrating quantum computing with classical comput
+ing systems to optimize workloads and enhance performance.
+
+5. **kScalability**: Innovating scalable architectures, such as superconduc
+In [8]:
+
+ting qubits, ion traps, and photonic systems, to increase the number of qu
+bits in a quantum processor.
+
+6. *kQuantum Software Development**x: Creating advanced quantum algorithms
+and software tools to better utilize quantum hardware.
+
+7. *kInterconnects and Networkingx*: Exploring quantum communication proto
+cols and quantum networking to connect multiple quantum processors for lar
+ger computations.
+
+8. *kCommercialization Effortsx**x: Partnering with industry to accelerate t
+he practical application of quantum technologies in various fields.
+
+These initiatives aim to enhance the reliability, scalability, and utility
+of quantum computing systems.
+
+Q4: What are some specific examples of recent breakthroughs or projects in
+any of these strategies that have shown promise in advancing quantum compu
+ting technology?
+
+A4: Recent breakthroughs in quantum computing technology include:
+
+1. **Superconducting Qubits**: Google's Sycamore processor demonstrated qu
+antum supremacy in 2019, and subsequent improvements have focused on error
+correction and coherence times.
+
+2. **Trapped Ions**: IonQ and Honeywell have developed trapped ion systems
+with high fidelity, leading to advancements in scalable quantum processor
+S.
+
+3. *kQuantum Error Correctionx*: Researchers have made significant strides
+in error-correcting codes, such as surface codes, which enhance the reliab
+ility of quantum computations.
+
+4. **Quantum Networking**: Projects Like the Quantum Internet Alliance are
+working on quantum repeaters and entanglement distribution, paving the way
+for secure quantum communication.
+
+5. *kQuantum Algorithms**x: New algorithms, such as variational quantum eig
+ensolvers (VQE), have been successfully applied to chemical simulations, s
+howing practical applications of quantum computing.
+
+6. *kHybrid Quantum-Classical Systems**: Companies like IBM are developing
+quantum-classical hybrid systems that leverage classical computing to opti
+mize quantum algorithms, enhancing performance.
+
+These projects indicate the rapid progress in the field, contributing to t
+he broader goal of practical quantum computing.
+
+Error Handling and Validation
+
+In this final section, we'll implement error handling and validation in our prompt
+chains to make them more robust.
+
+# Define prompt templates
+generate_prompt = PromptTemplate(
+input_variables=["topic"],
+template="Generate a 4-digit number related to the topic: {topic}. R
+)
+
+validate_prompt = PromptTemplate(
+
+input_variables=["number", "topic"],
+
+template="Is the number {number} truly related to the topic '{topic}
+)
+
+def extract_number( text):
+"extract a 4-digit number from the given text.
+
+Args:
+text (str): The text to extract the number from.
+
+Returns:
+str or None: The extracted 4-digit number, or None if no valid n
+
+match = re.search(r'\b\d{4}\b', text)
+return match.group() if match else None
+
+def robust_number_generation(topic, max_attempts=3):
+"""Generate a topic-related number with validation and error handlin
+
+Args:
+topic (str): The topic to generate a number for.
+max_attempts (int): Maximum number of generation attempts.
+
+Returns:
+str: A validated 4-digit number or an error message.
+for attempt in range(max_attempts) :
+try:
+response = (generate_prompt | 1lm).invoke({"topic": topic}).
+number = extract_number (response)
+
+if not number:
+raise ValueError(f"Failed to extract a 4-digit number fr
+
+# Validate the relevance
+validation = (validate_prompt | 1llm).invoke({"number": numbe
+if validation. lower().startswith("yes"):
+return number
+else:
+print(f'Attempt {attempt + 1}: Number {number} was not v
+except Exception as e:
+print(f"Attempt {attempt + 1} failed: {str(e)}")
+
+return "Failed to generate a valid number after multiple attempts."
+# Test the robust number generation
+topic = "World War II"
+
+result = robust_number_generation( topic)
+print(f'Final result for topic '{topic}': {result}")
+
+Final result for topic ‘World War II': 1945

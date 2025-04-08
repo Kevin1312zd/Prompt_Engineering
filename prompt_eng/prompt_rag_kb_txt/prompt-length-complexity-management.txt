@@ -1,0 +1,571 @@
+Prompt Length and Complexity
+Management
+
+Overview
+
+This tutorial explores techniques for managing prompt length and complexity when
+working with large language models (LLMs). We'll focus on two key aspects:
+balancing detail and conciseness in prompts, and strategies for handling long
+contexts.
+
+Motivation
+
+Effective prompt engineering often requires finding the right balance between
+providing enough context for the model to understand the task and keeping prompts
+concise for efficiency. Additionally, many real-world applications involve processing
+long documents or complex multi-step tasks, which can exceed the context window
+of LLMs. Learning to manage these challenges is crucial for building robust Al
+applications.
+
+Key Components
+
+1. Balancing detail and conciseness in prompts
+2. Strategies for handling long contexts
+3. Practical examples using OpenAl's GPT model and LangChain
+
+Method Details
+
+We'll start by examining techniques for crafting prompts that provide sufficient
+context without unnecessary verbosity. This includes using clear, concise language
+and leveraging prompt templates for consistency.
+
+Next, we'll explore strategies for handling long contexts, such as:
+
+e Chunking: Breaking long texts into smaller, manageable pieces
+e Summarization: Condensing long texts while retaining key information
+e |terative processing: Handling complex tasks through multiple API calls
+
+Throughout the tutorial, we'll use practical examples to demonstrate these concepts,
+utilizing OpenAl's GPT model via the LangChain library.
+
+Conclusion
+In [1]:
+
+In [2]:
+
+By the end of this tutorial, you'll have a solid understanding of how to manage prompt
+length and complexity effectively. These skills will enable you to create more efficient
+and robust Al applications, capable of handling a wide range of text processing tasks.
+
+Setup
+
+First, let's import the necessary libraries and set up our environment.
+
+import os
+
+from langchain_openai import ChatOpenAI
+
+from langchain.prompts import PromptTemplate
+
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.chains.summarize import load_summarize_chain
+
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
+# Set up OpenAI API key
+os.environ["OPENAI_API_KEY"] = os.getenv( 'OPENAI_API_KEY')
+
+# Initialize the language model
+llm = ChatOpenAI (model="gpt-40-mini")
+
+print("Setup complete!")
+
+Setup complete!
+
+Balancing Detail and Conciseness
+
+Let's start by examining how to balance detail and conciseness in prompts. We'll
+compare responses from a detailed prompt and a concise prompt.
+
+# Detailed prompt
+
+detailed_prompt = PromptTemplate(
+input_variables=["topic"],
+template=""""Please provide a comprehensive explanation of {topic}. I
+historical context, key components, practical applications, and any
+Also, discuss any controversies or debates surrounding the topic, an
+future developments or trends."
+
+)
+
+# Concise prompt
+concise_prompt = PromptTemplate(
+input_variables=["topic"],
+template="Briefly explain {topic} and its main importance."
+
+)
+topic = "artificial intelligence"
+
+print("Detailed response:")
+print(11m. invoke(detailed_prompt. format (topic=topic)).content)
+print("\nConcise response:")
+print(11m. invoke(concise_prompt. format (topic=topic) ).content)
+
+Detailed response:
+### Comprehensive Explanation of Artificial Intelligence
+
+#### Definition
+
+Artificial Intelligence (AI) refers to the simulation of human intelligenc
+e in machines that are programmed to think and learn like humans. It encom
+passes a range of technologies and methodologies that allow computers to p
+erform tasks that typically require human intelligence, such as understand
+ing natural language, recognizing patterns, solving problems, and making d
+ecisions.
+
+#### Historical Context
+
+The concept of AI dates back to ancient history, with myths and stories of
+automatons and intelligent beings. However, the formal study of AI began i
+n the mid-20th century:
+
+1. **195@s - Birth of AI*x*: The term "artificial intelligence" was coined
+
+in 1956 during the Dartmouth Conference, organized by John McCarthy, Marvi
+n Minsky, Nathaniel Rochester, and Claude Shannon. Early work focused on s
+ymbolic methods and problem-solving.
+
+2. **196@s - Early Programs**: Programs Like ELIZA, which mimicked convers
+ation, and SHRDLU, which understood natural language in a limited context,
+emerged.
+
+3. *k197@s - The First AI Winterx«: Progress slowed due to unmet expectati
+ons, leading to reduced funding and interest, known as the "AI winter."
+
+4. **1980s - Revival through Expert Systems**: The development of expert s
+ystems, which used rule-based reasoning to solve specific problems, reigni
+ted interest.
+
+5. **1990s - Machine Learning**: The focus shifted towards machine learnin
+g, where computers learn from data. In 1997, IBM's Deep Blue defeated ches
+s champion Garry Kasparov, marking a significant milestone.
+
+6. *k200@s to Present — Deep Learning and Big Data**«: Advances in computin
+g power, availability of large datasets, and improvements in algorithms ha
+ve led to the rise of deep learning. This era saw significant breakthrough
+s in computer vision, natural language processing, and reinforcement learn
+ing.
+
+#### Key Components
+
+1. **«Machine Learning (ML)**: A subset of AI that enables systems to learn
+from data and improve over time without explicit programming. Techniques i
+nclude supervised, unsupervised, and reinforcement learning.
+
+2. **Natural Language Processing (NLP)*x: The ability of machines to under
+stand, interpret, and respond to human language. Examples include chatbot
+s, language translation, and sentiment analysis.
+
+3. **kComputer Vision*k: The capability to interpret and make decisions bas
+ed on visual data from the world. Applications include facial recognition,
+autonomous vehicles, and medical image analysis.
+4. **kRobotics*«: The intersection of AI and robotics involves the creation
+of machines that can perform tasks autonomously. Examples include manufact
+uring robots and drones.
+
+5. *kExpert Systems**: AI programs that emulate the decision-making abilit
+y of a human expert in a specific domain.
+
+#### Practical Applications
+AI has transformed various industries:
+
+- *kHealthcarex«x: AI algorithms assist in diagnosing diseases, analyzing m
+edical images, and personalizing treatment plans.
+
+- *&kFinancexx: Fraud detection, algorithmic trading, and risk management a
+re enhanced by AI systems.
+
+- *«kTransportationx*x: Self-driving cars and traffic management systems lev
+erage AI to improve safety and efficiency.
+
+- *kRetaile*x: AI is used for inventory management, personalized recommenda
+tions, and customer service chatbots.
+
+- **kEntertainment**: Content recommendation systems in platforms like Netf
+lix and Spotify use AI to tailor user experiences.
+
+#### Controversies and Debates
+
+1. **Ethical Concernsxx: Issues related to privacy, surveillance, bias in
+AI algorithms, and the potential for job displacement raise ethical questi
+ons. For instance, biased algorithms can lead to discriminatory practices
+in hiring or law enforcement.
+
+2. **AI Safety*x*: The potential for AI systems to act unpredictably or har
+mfully has led to debates on how to ensure AI alignment with human values
+and safety.
+
+3. *kAUtonomous Weapons**: The development of AI in military applications
+raises concerns about accountability and the moral implications of autonom
+ous weapons systems.
+
+4. **kRegulation*x*: Governments and organizations are grappling with how to
+regulate AI technologies effectively while fostering innovation.
+
+#### Future Developments and Trends
+
+1. **Explainable AI (XAI)*k: As AI systems become more complex, the need f
+or transparency and interpretability in their decision-making processes is
+growing.
+
+2. **kGeneral AI**: Research continues into the development of Artificial G
+eneral Intelligence (AGI), which would possess the ability to understand a
+nd learn any intellectual task that a human can.
+
+3. **kHuman-AI Collaborationx*: Increasing focus on creating systems that e
+nhance human capabilities rather than replace them.
+
+4. **AI in Sustainability**: Leveraging AI for climate modeling, resource
+management, and optimizing energy consumption.
+
+5. *kIntegration with IoT**«: The convergence of AI with the Internet of Th
+ings (IoT) is expected to drive smarter devices and more efficient systems
+in various sectors.
+In [3]:
+
+6. *kRegulation and Policy Development**: As AI technologies evolve, there
+will likely be increased calls for regulatory frameworks to address ethica
+lL concerns and ensure responsible use.
+
+### Conclusion
+
+Artificial intelligence is a rapidly evolving field with profound implicat
+ions for society. While it offers significant benefits across various doma
+ins, it also poses challenges that require careful consideration. As techn
+ology continues to advance, a balanced approach to innovation, ethics, and
+regulation will be essential in shaping the future of AI.
+
+Concise response:
+
+Artificial intelligence (AI) refers to the simulation of human intelligenc
+e in machines that are programmed to think and learn like humans. This enc
+ompasses a range of technologies, including machine learning, natural lang
+uage processing, computer vision, and robotics, which enable computers to
+perform tasks that typically require human intelligence.
+
+The main importance of AI lies in its ability to enhance efficiency and pr
+oductivity across various sectors. It can analyze vast amounts of data qui
+ckly, automate repetitive tasks, improve decision-making, and provide pers
+onalized experiences. AI applications are found in areas such as healthcar
+e (diagnosing diseases), finance (fraud detection), transportation (autono
+mous vehicles), and customer service (chatbots), making processes more eff
+icient and enabling innovations that can significantly improve quality of
+life.
+
+Analysis of Prompt Balance
+
+Let's analyze the differences between the detailed and concise prompts, and discuss
+strategies for finding the right balance.
+
+analysis_prompt = PromptTemplate(
+input_variables=["detailed_response", '"concise_response"],
+template="""Compare the following two responses on artificial intell
+
+Detailed response:
+{detailed_response}
+
+Concise response:
+{concise_response}
+
+Analyze the differences in terms of:
+
+1. Information coverage
+
+2. Clarity and focus
+
+3. Potential use cases for each type of response
+
+Then, suggest strategies for balancing detail and conciseness in prompts
+
+)
+
+detailed_response = 1lm.invoke(detailed_prompt. format (topic=topic) ).conti
+concise_response = 11m. invoke(concise_prompt. format(topic=topic) ).conten
+
+analysis = Lm. invoke(analysis_prompt. format (
+detailed_response=detailed_response,
+concise_response=concise_response
+)).content
+print(analysis)
+### Analysis of the Two Responses
+
+#### 1. Information Coverage
+
+- **kDetailed Responsex*: This response provides a comprehensive overview o
+f artificial intelligence. It includes definitions, historical context, ke
+y components, practical applications, relevant examples, controversies, an
+d potential future developments. It covers a wide array of topics, making
+
+it suitable for readers looking for in-depth knowledge and understanding o
+f Al.
+
+- *kConcise Response*k: The concise response offers a brief definition of
+AI and highlights its importance and potential impacts. It touches on cate
+gories of AI and summarizes its applications in various industries. Howeve
+r, it lacks the depth provided in the detailed response, omitting historic
+al context, specific examples, and discussions on controversies and future
+developments.
+
+#### 2. Clarity and Focus
+
+- **kDetailed Responsex*: While the detailed response is rich in informatio
+n, it may overwhelm some readers due to its extensive coverage. The organi
+zation into sections helps with clarity, but the sheer amount of informati
+on could lead to cognitive overload for those not familiar with the subjec
+t matter.
+
+- *kConcise Responsex*: The concise response is clear and focused, deliver
+ing essential information in a straightforward manner. It effectively comm
+unicates the core concepts of AI without unnecessary complexity. However,
+it may leave readers wanting more detail, especially those who are unfamil
+iar with AI and its implications.
+
+#### 3. Potential Use Cases for Each Type of Response
+- **kDetailed Responsex*: This response is suitable for:
+
+- Academic settings or research purposes where an in-depth understanding
+of AI is required.
+
+- Professionals in the AI field who need comprehensive knowledge of hist
+orical developments, technical specifics, and ethical considerations.
+
+- Educational materials for teaching AI concepts at a higher level.
+
+— *kConcise Responsexk: This response is ideal for:
+
+- General audiences or newcomers seeking a quick overview of AI concept
+S.
+
+- Business professionals looking for a high-level understanding of AI's
+impact on industries.
+
+- Media articles or marketing materials that require succinct explanatio
+ns without delving into technicalities.
+
+### Strategies for Balancing Detail and Conciseness in Prompts
+
+1. **Define the Audiencex*: Tailor the response based on the target audien
+ce's familiarity with the topic. For expert audiences, include more detail
+ed information; for laypersons, stick to key concepts and applications.
+
+2. *kUse Layered Information*x*: Start with a concise overview and then pro
+vide the option for deeper dives into specific sections. This could mean s
+ummarizing key points first, then linking to more detailed explanations fo
+r those interested.
+
+3. *kPrioritize Key Points*«*: Identify and focus on the most critical aspe
+In [5]:
+
+cts of the topic, eliminating less relevant details. Use bullet points or
+numbered lists for clarity and brevity.
+
+4. **Incorporate Visual Aids**«: Use diagrams, flowcharts, or infographics
+to convey complex information visually, allowing for a clearer understandi
+ng without lengthy explanations.
+
+5. *kEncourage Questions**: Invite readers to ask questions if they need c
+larification or more detail on specific points, creating a dynamic interac
+tion that can address both detail and conciseness as needed.
+
+6. *kIterative Refinement**: Create initial drafts that include both conci
+se and detailed sections, then refine the text based on feedback, focusing
+on clarity and essential information only.
+
+By applying these strategies, one can effectively balance the need for det
+ailed information and the demand for conciseness in various contexts.
+
+Strategies for Handling Long Contexts
+
+Now, let's explore strategies for handling long contexts, which often exceed the token
+limits of language models.
+
+1. Chunking
+
+Chunking involves breaking long texts into smaller, manageable pieces. Let's
+demonstrate this using a long text passage.
+
+# [A long passage about artificial intelligence, its history, applicatio
+
+long_text ="
+
+Artificial intelligence (AI) is a branch of computer science that aims t
+The field of AI has a rich history dating back to the 195@s, with key mi
+AI encompasses a wide range of subfields, including machine learning, na
+Practical applications of AI include speech recognition, image classifici
+AI has the potential to revolutionize many industries, from healthcare a
+However, there are ongoing debates and controversies surrounding AI, suc
+Looking ahead, the future of AI holds promise for advancements in areas
+The intersection of AI with other technologies like blockchain, quantum
+But as AI continues to evolve, it is essential to consider the societal
+One of the key challenges for AI researchers and developers is to strike
+a whole while minimizing potential risks.
+
+If managed effectively, AI has the potential to transform our world in w
+Though the future of AI is uncertain, one thing is clear: the impact of
+
+# Initialize the text splitter
+
+text_splitter = RecursiveCharacterTextSplitter (
+chunk_size=10@0,
+chunk_over Lap=2@@,
+length_function=len
+
+)
+
+# Split the text into chunks
+chunks = text_splitter.split_text(long_text)
+In [22]:
+
+In [24]:
+
+print(f'Number of chunks: {len(chunks) }")
+print(f"First chunk: {chunks[@] [:200]}...")
+
+Number of chunks: 2
+
+First chunk: Artificial intelligence (AI) is a branch of computer science
+that aims to create intelligent machines that can simulate human cognitive
+processes.
+
+The field of AI has a rich history dating back to the...
+
+2. Summarization
+
+Summarization can be used to condense long texts while retaining key information.
+Let's use LangChain's summarization chain to demonstrate this.
+
+from langchain.docstore.document import Document
+
+# Convert text chunks to Document objects
+doc_chunks = [Document(page_content=chunk) for chunk in chunks]
+
+# Load the summarization chain
+chain = load_summarize_chain(1llm, chain_type="'map_reduce" )
+
+# Summarize the long text
+summary_result = chain. invoke(doc_chunks)
+
+print("Summary:")
+print(summary_result['output_text'] )
+
+c:\Users\N7\PycharmProjects\llm_tasks\prompt_engineering_private\.venv\Lib
+\site-packages\langchain_openai\chat_models\base. py:356: UserWarning: Unex
+pected type for token usage: <class 'NoneType'>
+
+warnings.warn(f"'Unexpected type for token usage: {type(new_usage)}")
+Summary:
+Artificial intelligence (AI), a field of computer science established in t
+he 195@s, aims to create machines that replicate human cognitive processe
+s. It encompasses areas like machine learning and natural language process
+ing, with applications in speech recognition, autonomous vehicles, and med
+ical diagnosis. While AI has transformative potential, it also raises conc
+erns about job displacement, algorithmic bias, and ethical issues. Future
+advancements are expected in explainable AI, ethics, and human-AI collabor
+ation, influenced by technologies like blockchain and quantum computing. B
+alancing innovation with responsibility is crucial to maximizing AI's bene
+fits while minimizing risks, as its impact on society remains significant
+and uncertain.
+
+3. Iterative Processing
+
+For complex tasks that require multiple steps, we can use iterative processing. Let's
+demonstrate this with a multi-step analysis task.
+
+def iterative_analysis(text, steps):
+
+Perform iterative analysis on a given text.
+
+Args:
+In [25]:
+
+text (str): The text to analyze.
+steps (list): List of analysis steps to perform.
+
+Returns:
+str: The final analysis result.
+result = text
+for step in steps:
+prompt = PromptTemplate(
+input_variables=["text"],
+template=f''Analyze the following text. {step}\n\nText: {{tex
+)
+result = Llm. invoke(prompt. format(text=result) ).content
+return result
+
+analysis_steps = [
+"Identify the main topics discussed.",
+"Summarize the key points for each topic.",
+"Provide a brief conclusion based on the analysis."
+
+]
+
+final_analysis = iterative_analysis(long_text, analysis_steps)
+print("Final Analysis:")
+print(final_analysis)
+
+Final Analysis:
+
+The text provides a comprehensive overview of artificial intelligence (A
+I), covering its definition, historical development, various subfields, ap
+plications across different industries, and the associated challenges and
+ethical considerations.
+
+Key points include the identification of AI as a crucial domain within com
+puter science aimed at mimicking human cognitive functions, alongside a hi
+storical timeline that traces its evolution since the 195@s. The text disc
+usses significant subfields such as machine learning and natural language
+processing, while also detailing practical applications in areas like heal
+thcare and transportation.
+
+Moreover, it addresses the societal implications of AI, including job disp
+lacement and algorithmic bias, emphasizing the need for ethical considerat
+ions in its development and deployment. The future prospects section highl
+ights anticipated advancements and the integration of AI with emerging tec
+hnologies, while acknowledging the uncertainties that lie ahead.
+
+*kConclusion**: The text effectively encapsulates the multifaceted nature
+
+of AI, underlining its transformative potential and the necessity for a ba
+lanced approach that considers both technological advancement and ethical
+
+responsibility. As AI continues to evolve, its implications for society wi
+Ll be profound, warranting ongoing dialogue and careful stewardship.
+
+Practical Tips for Managing Prompt Length and
+Complexity
+
+Let's conclude with some practical tips for managing prompt length and complexity
+in real-world applications.
+
+tips_prompt = """
+Based on the examples and strategies we've explored for managing prompt
+provide a list of 5 practical tips for developers working with large lan
+Each tip should be concise and actionable.
+
+tips = 1llm. invoke(tips_prompt) .content
+print(tips)
+
+Here are five practical tips for developers working with large language mo
+dels:
+
+1. **Break Down Tasks*x: Divide complex queries into smaller, manageable t
+asks. This simplifies the prompt and allows the model to focus on specific
+aspects, improving accuracy and relevance.
+
+2. *«kUse Clear Instructions**: Formulate prompts with explicit and concise
+instructions. Clearly state what you want the model to do to minimize ambi
+guity and enhance performance.
+
+3. *kLimit Context Length*k*x: Keep the context provided to the model concis
+e. Use only essential information to prevent overwhelming the model and to
+maintain focus on the primary task.
+
+4. **Iterate and Refinex*: Test different prompt variations and analyze th
+e outcomes. Iteratively refine your prompts based on model responses to ac
+hieve better results over time.
+
+5. *kLeverage System Messages*x*x: Utilize system messages to set the tone a
+nd style of responses. Providing clear guidelines at the start can help al
+ign the model's output with your expectations.

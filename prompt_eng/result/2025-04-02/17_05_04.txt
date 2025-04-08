@@ -1,0 +1,22 @@
+2025-04-02 17:05:04,457 - 17_05_04.txt - INFO - -------------------------start new experiment-------------------------------
+2025-04-02 17:07:12,115 - 17_05_04.txt - INFO - 
+2025-04-02 17:07:12,115 - 17_05_04.txt - INFO - 用户输入的原始prompt0是【 I want to query a certain material card in MSC Nastran BDF file. 】
+
+2025-04-02 17:07:12,116 - 17_05_04.txt - INFO - optimizer基于prompt0生成的多个提示词包括:
+
+2025-04-02 17:07:12,116 - 17_05_04.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:07:12,125 - 17_05_04.txt - INFO - 【 Prompt: In MSC Nastran BDF files, material properties are defined using MAT1 cards. Provide a detailed explanation of how to query a MAT1 material card, including: 1) BDF file structure syntax 2) Key parameters (E, G, NU, RHO) 3) Example input/output format. Present results in a table with Field, Description, and Format columns.
+
+Strategy：Contextual Specification 
+】
+
+2025-04-02 17:07:12,125 - 17_05_04.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:07:12,125 - 17_05_04.txt - INFO - 【 Prompt: In an MSC Nastran BDF file, material properties are defined using MAT1, MAT2, or other MAT* entries. Each material card follows fixed field formatting: Field 1 for card name (e.g., MAT1), Field 2 for MID (Material ID), followed by material-specific parameters. Provide the exact syntax, field positions, and parameter definitions for querying a specific material card (e.g., MAT1 with MID=1001), including continuation lines if applicable.  
+Strategy：Contextual Scaffolding 
+】
+
+2025-04-02 17:07:12,126 - 17_05_04.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:09:03,936 - 17_05_04.txt - INFO - 经过evaluator评估得到的最优提示词是【 Prompt:In an MSC Nastran BDF file, material properties are defined using MAT1, MAT2, or other MAT* entries. Each material card follows fixed field formatting: Field 1 for card name (e.g., MAT1), Field 2 for MID (Material ID), followed by material-specific parameters. Provide the exact syntax, field positions, and parameter definitions for querying a specific material card (e.g., MAT1 with MID=1001), including continuation lines if applicable.  
+Strategy：Contextual Scaffolding
+Analysis:最优提示词通过明确限定字段位置、强制要求续行处理、指定MID查询条件，构建了更结构化的技术框架。其优势在于：1) 强调固定字段格式规范，符合BDF文件列式定位特性；2) 要求包含续行处理，覆盖实际工程场景；3) 通过MID=1001示例强化查询特异性，比单纯参数解释更具实操指导性。 】
+

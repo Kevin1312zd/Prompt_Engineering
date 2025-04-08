@@ -1,0 +1,382 @@
+Zero-Shot Prompting Tutorial
+
+Overview
+
+This tutorial provides a comprehensive introduction to zero-shot prompting, a
+powerful technique in prompt engineering that allows language models to perform
+tasks without specific examples or prior training. We'll explore how to design
+effective zero-shot prompts and implement strategies using OpenAl's GPT models
+and the LangChain library.
+
+Motivation
+
+Zero-shot prompting is crucial in modern Al applications as it enables language
+models to generalize to new tasks without the need for task-specific training data or
+fine-tuning. This capability significantly enhances the flexibility and applicability of Al
+systems, allowing them to adapt to a wide range of scenarios and user needs with
+minimal setup.
+
+Key Components
+
+1. Understanding Zero-Shot Learning: An introduction to the concept and its
+importance in Al.
+
+Prompt Design Principles: Techniques for crafting effective zero-shot prompts.
+Task Framing: Methods to frame various tasks for zero-shot performance.
+OpenAl Integration: Using OpenAl's GPT models for zero-shot tasks.
+
+a fF wWN
+
+LangChain Implementation: Leveraging LangChain for structured zero-shot
+prompting.
+
+Method Details
+
+The tutorial will cover several methods for implementing zero-shot prompting:
+
+1. Direct Task Specification: Crafting prompts that clearly define the task without
+examples.
+
+2. Role-Based Prompting: Assigning specific roles to the Al to guide its responses.
+
+3. Format Specification: Providing output format guidelines in the prompt.
+
+4. Multi-step Reasoning: Breaking down complex tasks into simpler zero-shot
+steps.
+
+5. Comparative Analysis: Evaluating different zero-shot prompt structures for the
+same task.
+In [2]:
+
+Throughout the tutorial, we'll use Python code with OpenAl and LangChain to
+demonstrate these techniques practically.
+
+Conclusion
+
+By the end of this tutorial, learners will have gained:
+
+A solid understanding of zero-shot prompting and its applications.
+
+Practical skills in designing effective zero-shot prompts for various tasks.
+Experience in implementing zero-shot techniques using OpenAl and LangChain.
+Insights into the strengths and limitations of zero-shot approaches.
+
+oF WN >
+
+A foundation for further exploration and innovation in prompt engineering.
+
+This knowledge will empower learners to leverage Al models more effectively across
+a wide range of applications, enhancing their ability to solve novel problems and
+create more flexible Al systems.
+
+Setup
+
+Let's start by importing the necessary libraries and setting up our environment.
+
+import os
+
+from langchain_openai import ChatOpenAI
+
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Set up OpenAI API key
+os.environ["OPENAI_API_KEY"] = os.getenv( 'OPENAI_API_KEY')
+
+# Initialize the language model
+llm = ChatOpenAI (model="gpt-40-mini")
+
+def create_chain(prompt_template) :
+
+Create a LangChain chain with the given prompt template.
+
+Args:
+prompt_template (str): The prompt template string.
+
+Returns:
+
+LLMChain: A LangChain chain object.
+prompt = PromptTemplate. from_template(prompt_template)
+return prompt | Ulm
+In [5]:
+
+In [7]:
+
+1. Direct Task Specification
+
+In this section, we'll explore how to craft prompts that clearly define the task without
+providing examples. This is the essence of zero-shot prompting.
+
+direct_task_prompt = "Classify the sentiment of the following text as
+Do not explain your reasoning, just provide the classification.
+
+Text: {text}
+Sentiment:'""'"
+direct_task_chain = create_chain(direct_task_prompt)
+
+# Test the direct task specification
+texts = [
+"T absolutely loved the movie! The acting was superb.",
+"The weather today is quite typical for this time of year.",
+"I'm disappointed with the service I received at the restaurant."
+
+for text in texts:
+result = direct_task_chain. invoke({"text": text}).content
+print(f'Text: {text}")
+print(f'Sentiment: {result}")
+
+Text: I absolutely loved the movie! The acting was superb.
+
+Sentiment: Positive
+
+Text: The weather today is quite typical for this time of year.
+Sentiment: Neutral
+
+Text: I'm disappointed with the service I received at the restaurant.
+Sentiment: Negative
+
+2. Format Specification
+
+Providing output format guidelines in the prompt can help structure the Al's response
+ina zero-shot scenario.
+
+format_spec_prompt = "Generate a short news article about {topic}.
+Structure your response in the following format:
+
+Headline: [A catchy headline for the article]
+
+Lead: [A brief introductory paragraph summarizing the key points]
+Body: [2-3 short paragraphs providing more details]
+
+Conclusion: [A concluding sentence or call to action]"""
+format_spec_chain = create_chain( format_spec_prompt)
+
+# Test the format specification prompting
+
+topic = "The discovery of a new earth-like exoplanet"
+
+result = format_spec_chain.invoke({"'topic': topic}).content
+print( result)
+In [8]:
+
+*kHeadlLine:** Astronomers Unveil New Earth-Like Exoplanet in Habitable Zon
+e
+
+*kLead:** In a groundbreaking discovery, a team of astronomers has identif
+ied a new Earth-like exoplanet located within the habitable zone of its st
+ar, raising hopes for the possibility of extraterrestrial life. Dubbed "Ke
+pler—452d,"" the planet orbits a sun-like star approximately 1,40@ light-ye
+ars away, offering a tantalizing glimpse into worlds beyond our solar syst
+em,
+
+*kBody:** The discovery was made using advanced observational techniques f
+rom the Kepler Space Telescope, which has been instrumental in finding tho
+usands of exoplanets. Kepler-452d is approximately 1.6 times the size of E
+arth and orbits its star at a distance that allows for liquid water to exi
+st on its surface—a crucial condition for life as we know it. Scientists b
+elieve that the planet's atmosphere could potentially support life, making
+it a prime candidate for future exploration.
+
+The research team, led by Dr. Emily Chen, emphasizes the significance of t
+his find. "This is one of the most promising Earth-like planets we've disc
+overed to date," Chen stated. "The conditions appear to be suitable for li
+fe, and with the right tools, we may be able to analyze its atmosphere in
+the coming years." As technology advances, the prospect of studying Kepler
+-452d and others like it becomes increasingly viable.
+
+*kConclusion:** As we stand on the brink of a new era in space exploratio
+n, this exciting discovery fuels the quest to answer one of humanity's mos
+t profound questions: Are we alone in the universe?
+
+3. Multi-step Reasoning
+
+For complex tasks, we can break them down into simpler zero-shot steps. This
+approach can improve the overall performance of the model.
+
+multi_step_prompt = "Analyze the following text for its main argument,
+Provide your analysis in the following steps:
+
+1. Main Argument: Identify and state the primary claim or thesis.
+2. Supporting Evidence: List the key points or evidence used to support
+3. Potential Counterarguments: Suggest possible objections or alternativ
+
+Text: {text}
+
+Analysis:"""
+
+multi_step_chain = create_chain(multi_step_prompt)
+
+# Test the multi-step reasoning approach
+
+text = '"""While electric vehicles are often touted as a solution to clim
+The production of batteries for electric cars requires significant minin
+Moreover, if the electricity used to charge these vehicles comes from fo
+
+However, as renewable energy sources become more prevalent and battery t
+
+result = multi_step_chain. invoke({"text": text}).content
+print( result)
+In [11]:
+
+1. **Main Argument**: The primary claim of the text is that while electric
+vehicles (EVs) are often promoted as a solution to climate change, their e
+nvironmental impact is complex and not entirely positive due to the mining
+for battery production and reliance on fossil fuels for electricity.
+
+2. *kSupporting Evidencexx:
+
+- The production of batteries for electric vehicles involves significan
+t mining operations, which can lead to habitat destruction.
+
+- Mining for battery materials can also result in water pollution.
+
+- The environmental benefits of electric vehicles may be undermined if
+the electricity used for charging is sourced from fossil fuels.
+
+- Acknowledgment that improvements in renewable energy sources and batt
+ery technology could enhance the role of electric vehicles in addressing c
+Limate change in the future.
+
+3. **kPotential Counterarguments*x:
+
+- Proponents of electric vehicles might argue that the overall lifecycl
+e emissions of EVs are still lower than those of traditional vehicles, eve
+n when accounting for battery production and electricity sourcing.
+
+- The advancements in battery recycling technologies could mitigate the
+negative environmental impacts associated with battery production.
+
+- Renewable energy sources are rapidly growing, and the transition to g
+reen electricity could significantly improve the environmental benefits of
+electric vehicles.
+
+- The argument could be made that the shift towards electric vehicles i
+S a necessary step toward reducing reliance on fossil fuels, despite curre
+nt Limitations in technology and energy sourcing.
+
+4. Comparative Analysis
+
+Let's compare different zero-shot prompt structures for the same task to evaluate
+their effectiveness.
+
+def compare_prompts(task, prompt_templates):
+
+Compare different prompt templates for the same task.
+
+Args:
+
+task (str): The task description or input.
+
+prompt_templates (dict): A dictionary of prompt templates with t
+print(f'Task: {task}\n")
+for name, template in prompt_templates.items():
+
+chain = create_chain( template)
+
+result = chain. invoke({"task": task}).content
+
+print(f''{name} Prompt Result:")
+
+print(result)
+
+print("\n" + "_My5@ + "\n")
+
+task = "Explain conciesly the concept of blockchain technology"
+
+prompt_templates = {
+"Basic": "Explain {task}.",
+"Structured": """Explain {task} by addressing the following points:
+Definition
+Key features
+Real-world applications
+Potential impact on industries"
+
+BWNPR
+}
+
+compare_prompts(task, prompt_templates)
+
+Task: Explain conciesly the concept of blockchain technology
+
+Basic Prompt Result:
+
+Blockchain technology is a decentralized digital ledger system that secure
+ly records transactions across multiple computers. It ensures that once da
+ta is entered, it cannot be altered without consensus from the network par
+ticipants. Each block contains a list of transactions and a cryptographic
+hash of the previous block, forming a chain. This structure enhances secur
+ity, transparency, and trust, as it eliminates the need for a central auth
+ority and makes tampering with data extremely difficult. Blockchain is wid
+ely used in cryptocurrencies, supply chain management, and various applica
+tions requiring secure and transparent record-keeping.
+
+Structured Prompt Result:
+
+### 1. Definition
+
+Blockchain technology is a decentralized digital ledger system that record
+s transactions across multiple computers in a way that ensures the securit
+y, transparency, and immutability of the data. Each transaction is grouped
+into a block and linked to the previous block, forming a chronological cha
+in,
+
+### 2. Key Features
+
+- *«*kDecentralization**: No single entity controls the network; all partici
+pants have access to the same data.
+
+- *kTransparency**: Transactions are visible to all users, promoting accou
+ntability.
+
+- *kImmutability**: Once recorded, transactions cannot be altered or delet
+ed, ensuring data integrity.
+
+— *kSecurity*xk: Cryptographic techniques protect data, making it resistant
+to fraud and hacking.
+
+- *kConsensus Mechanisms*k: Various protocols (e.g., Proof of Work, Proof
+
+of Stake) are used to validate transactions and maintain network integrit
+
+y.
+
+### 3. Real-world Applications
+
+- *kCryptocurrencies**: Digital currencies like Bitcoin and Ethereum use b
+lockchain for secure transactions.
+
+- *kSupply Chain Management*x: Enhances traceability and transparency in t
+racking goods from origin to destination.
+
+- *kSmart Contracts**: Self-executing contracts with the terms directly wr
+itten into code, automating processes without intermediaries.
+
+- *xkVoting Systems**k: Secure and transparent voting solutions to enhance e
+lectoral integrity.
+
+- *kHealthcarek«: Secure sharing of patient data across platforms while ma
+intaining privacy.
+
+### 4. Potential Impact on Industries
+
+- *kFinancekx*x: Reduces costs and increases transaction speeds by eliminati
+ng intermediaries, enabling faster cross-border payments.
+
+- *kReal Estatex«: Streamlines property transactions through transparent r
+ecords and fractional ownership possibilities.
+
+- *kInsurancex«: Automates claims processing and fraud detection through s
+mart contracts.
+
+- *&kManufacturingx*x: Enhances quality control and accountability in the pr
+oduction process through improved supply chain visibility.
+- *kGovernment**: Increases transparency in public records and reduces cor
+ruption through tamper-proof systems.
+
+Overall, blockchain technology has the potential to revolutionize various
+sectors by improving efficiency, transparency, and security.

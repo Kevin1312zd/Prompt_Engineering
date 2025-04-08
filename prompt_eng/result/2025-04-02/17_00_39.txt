@@ -1,0 +1,22 @@
+2025-04-02 17:00:39,209 - 17_00_39.txt - INFO - -------------------------start new experiment-------------------------------
+2025-04-02 17:02:43,005 - 17_00_39.txt - INFO - 
+2025-04-02 17:02:43,006 - 17_00_39.txt - INFO - 用户输入的原始prompt0是【 I want to query a certain material card in MSC Nastran BDF file. 】
+
+2025-04-02 17:02:43,006 - 17_00_39.txt - INFO - optimizer基于prompt0生成的多个提示词包括:
+
+2025-04-02 17:02:43,006 - 17_00_39.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:02:43,015 - 17_00_39.txt - INFO - 【 Prompt: As an engineer analyzing an MSC Nastran BDF file, I need to query the MAT1 material card with ID 100. Please provide the card's parameters, syntax format, and location within the file structure.  
+Strategy：Contextual Anchoring 
+】
+
+2025-04-02 17:02:43,015 - 17_00_39.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:02:43,015 - 17_00_39.txt - INFO - 【 Prompt: As a structural engineer working with MSC Nastran, I need to query specific material properties from a BDF file. Please provide the exact syntax and methodology to: 1) Locate a material card by MAT ID 2) Extract material name/type 3) Retrieve associated elastic/plastic properties 4) Identify related property references. Include BDF format examples for MAT1 and MAT8 cards.
+
+Strategy：Context Injection 
+】
+
+2025-04-02 17:02:43,016 - 17_00_39.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:03:19,676 - 17_00_39.txt - INFO - 经过evaluator评估得到的最优提示词是【 Prompt:As a structural engineer working with MSC Nastran, I need to query specific material properties from a BDF file. Please provide the exact syntax and methodology to: 1) Locate a material card by MAT ID 2) Extract material name/type 3) Retrieve associated elastic/plastic properties 4) Identify related property references. Include BDF format examples for MAT1 and MAT8 cards.
+Strategy：Context Injection
+Analysis:第二个提示词通过上下文注入策略实现了更完整的工程需求覆盖。其优势体现在：1）结构化分解四个关键操作步骤，符合实际工作流程 2）同时涵盖MAT1和MAT8两种常用材料卡，扩展了应用场景 3）明确要求格式示例，增强输出实用性 4）通过属性关联检索实现了系统级数据追溯，而不仅是孤立参数查询。这种多维度的问题构建方式能引导AI生成更具操作指导性的专业响应。 】
+

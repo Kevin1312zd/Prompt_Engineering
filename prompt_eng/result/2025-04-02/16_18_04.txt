@@ -1,0 +1,56 @@
+2025-04-02 16:18:04,079 - 16_18_04.txt - INFO - -------------------------start new experiment-------------------------------
+2025-04-02 16:21:37,146 - 16_18_04.txt - INFO - 
+2025-04-02 16:21:37,146 - 16_18_04.txt - INFO - 用户输入的原始prompt0是【 I want to query a certain material card in MSC Nastran BDF file. 】
+
+2025-04-02 16:21:37,146 - 16_18_04.txt - INFO - optimizer基于prompt0生成的多个提示词包括:
+
+2025-04-02 16:21:37,146 - 16_18_04.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 16:21:37,155 - 16_18_04.txt - INFO - 【 Prompt:  
+"Act as a finite element analysis engineer working with MSC Nastran. Create a systematic process to query material properties from a BDF file with the following requirements:  
+1. Identify target material by MAT card type (e.g., MAT1, MAT2) and material ID  
+2. Extract specific properties: Young's modulus, Poisson's ratio, density, thermal expansion coefficient  
+3. Output structured JSON format with error handling for missing entries  
+4. Include BDF syntax considerations (8-field format, continuation lines)  
+5. Provide example input/output:  
+   Input: 'MAT1,101,2.1E5,,0.3,7800'  
+   Output: {'Material_ID':101, 'Type':'MAT1', 'E':210000, 'nu':0.3, 'rho':7800}  
+6. Implement verification checks for unit consistency and mandatory fields"  
+
+This prompt uses systems thinking to address BDF file structure, incorporates concrete examples (PTTRN pattern), and specifies error conditions while maintaining engineering context. The structured format enables direct implementation in Python or other parsing tools. 
+】
+
+2025-04-02 16:21:37,155 - 16_18_04.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 16:21:37,155 - 16_18_04.txt - INFO - 【 Prompt:  
+"Explain how to locate and interpret a specific material card (e.g., MAT1, MAT2) in an MSC Nastran BDF file. Include:  
+1. Required syntax (field positions, delimiters, mandatory parameters)  
+2. Methods to query by Material ID or name  
+3. Example BDF entries for common materials (isotropic, orthotropic)  
+4. Strategies for parsing large BDF files efficiently  
+5. Cross-referencing with property cards (PSOLID, PSHELL)  
+
+Context: User is working with finite element models and needs to extract/validate material properties programmatically."  
+
+**Optimization Strategy**:  
+- **Specificity**: Targets MSC Nastran’s rigid BDF formatting rules.  
+- **Structure**: Breaks down the query into sub-tasks (syntax, query methods, examples).  
+- **Domain Context**: References FEA-specific terminology (PSOLID, PSHELL).  
+- **Actionability**: Guides toward programmatic parsing, addressing unstated needs.  
+- **Example-Driven**: Reduces ambiguity by requesting concrete BDF examples.  
+
+This leverages the *Inversion Principle* (anticipate follow-up questions) and *Role-Pattern* (assume user’s technical proficiency in FEA). 
+】
+
+2025-04-02 16:21:37,155 - 16_18_04.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 16:23:21,201 - 16_18_04.txt - INFO - 经过evaluator评估得到的最优提示词是【 prompt1:Prompt:  
+"Act as a finite element analysis engineer working with MSC Nastran. Create a systematic process to query material properties from a BDF file with the following requirements:  
+1. Identify target material by MAT card type (e.g., MAT1, MAT2) and material ID  
+2. Extract specific properties: Young's modulus, Poisson's ratio, density, thermal expansion coefficient  
+3. Output structured JSON format with error handling for missing entries  
+4. Include BDF syntax considerations (8-field format, continuation lines)  
+5. Provide example input/output:  
+   Input: 'MAT1,101,2.1E5,,0.3,7800'  
+   Output: {'Material_ID':101, 'Type':'MAT1', 'E':210000, 'nu':0.3, 'rho':7800}  
+6. Implement verification checks for unit consistency and mandatory fields"  
+
+This prompt uses systems thinking to address BDF file structure, incorporates concrete examples (PTTRN pattern), and specifies error conditions while maintaining engineering context. The structured format enables direct implementation in Python or other parsing tools. 】
+

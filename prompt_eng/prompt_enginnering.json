@@ -1,0 +1,67 @@
+{
+  "remote_model_list": [
+    {
+      "model": "deepseek-ai/DeepSeek-V3",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "sk-zcpmjwctlnkthagcorztornyziblyxvkjireovscqsymjqyn",
+      "temperature": 0
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-R1",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "sk-zcpmjwctlnkthagcorztornyziblyxvkjireovscqsymjqyn",
+      "temperature": 0
+    },
+    {
+      "model": "Qwen/Qwen2.5-72B-Instruct",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "sk-zcpmjwctlnkthagcorztornyziblyxvkjireovscqsymjqyn",
+      "temperature": 0
+    },
+    {
+      "model": "Qwen/QwQ-32B",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "sk-zcpmjwctlnkthagcorztornyziblyxvkjireovscqsymjqyn",
+      "temperature": 0.8
+    },
+    {
+      "model": "Qwen/Qwen2.5-14B-Instruct",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "sk-zcpmjwctlnkthagcorztornyziblyxvkjireovscqsymjqyn",
+      "temperature": 0
+    },
+    {
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "sk-zcpmjwctlnkthagcorztornyziblyxvkjireovscqsymjqyn",
+      "temperature": 0
+    }
+  ],
+  "rag_file_path_list": [
+    "ambiguity-clarity.txt",
+    "Basic Prompt Structures.txt",
+    "constrained-guided-generation.txt",
+    "cot-prompting.txt",
+    "ethical-prompt-engineering.txt",
+    "evaluating-prompt-effectiveness.txt",
+    "few-shot-learning.txt",
+    "instruction-engineering-notebook.txt",
+    "intro-prompt-engineering-lesson.txt",
+    "multilingual-prompting.txt",
+    "negative-prompting.txt",
+    "prompt-chaining-sequencing.txt",
+    "prompt-length-complexity-management.txt",
+    "prompt-optimization-techniques.txt",
+    "prompt-security-and-safety.txt",
+    "prompt-templates-variables-jinja2.txt",
+    "role-prompting.txt",
+    "self-consistency.txt",
+    "specific-task-prompts.txt",
+    "task-decomposition-prompts.txt",
+    "zero-shot-prompting.txt"
+  ],
+  "question_param_list": [
+    //"write a email to my director to inform him that I want to quit my job.",
+    "I want to query a certain material card in MSC Nastran BDF file."
+  ]
+}

@@ -1,0 +1,395 @@
+Task Decomposition in Prompts Tutorial
+Overview
+This tutorial explores the concept of task decomposition in prompt engineering,
+focusing on techniques for breaking down complex tasks and chaining subtasks in
+prompts. These techniques are essential for effectively leveraging large language
+models to solve multi-step problems and perform complex reasoning tasks.
+
+Motivation
+As AI language models become more advanced, they are increasingly capable of
+handling complex tasks. However, these models often perform better when given
+clear, step-by-step instructions. Task decomposition is a powerful technique that
+allows us to break down complex problems into smaller, more manageable subtasks.
+This approach not only improves the model's performance but also enhances the
+interpretability and reliability of the results.
+
+Key Components
+1. Breaking Down Complex Tasks: Techniques for analyzing and dividing complex
+problems into simpler subtasks.
+2. Chaining Subtasks: Methods for sequentially connecting multiple subtasks to
+solve a larger problem.
+3. Prompt Design for Subtasks: Crafting effective prompts for each decomposed
+subtask.
+4. Result Integration: Combining the outputs from individual subtasks to form a
+comprehensive solution.
+
+Method Details
+The tutorial employs a step-by-step approach to demonstrate task decomposition:
+1. Problem Analysis: We start by examining a complex task and identifying its
+component parts.
+2. Subtask Definition: We define clear, manageable subtasks that collectively
+address the main problem.
+3. Prompt Engineering: For each subtask, we create targeted prompts that guide
+the AI model.
+4. Sequential Execution: We implement a chain of prompts, where the output of
+one subtask feeds into the next.
+
+5. Result Synthesis: Finally, we combine the outputs from all subtasks to form a
+comprehensive solution.
+Throughout the tutorial, we use practical examples to illustrate these concepts,
+demonstrating how task decomposition can be applied to various domains such as
+analysis, problem-solving, and creative tasks.
+
+Conclusion
+By the end of this tutorial, learners will have gained practical skills in:
+Analyzing complex tasks and breaking them down into manageable subtasks
+Designing effective prompts for each subtask
+Chaining prompts to guide an AI model through a multi-step reasoning process
+Integrating results from multiple subtasks to solve complex problems
+These skills will enable more effective use of AI language models for complex
+problem-solving and enhance the overall quality and reliability of AI-assisted tasks.
+
+Setup
+First, let's import the necessary libraries and set up our environment.
+In [1]:
+
+import os
+from langchain_openai import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from dotenv import load_dotenv
+# Load environment variables
+load_dotenv()
+# Set up OpenAI API key
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
+# Initialize the language model
+llm = ChatOpenAI(model="gpt-4o-mini")
+def run_prompt(prompt, **kwargs):
+"""Helper function to run a prompt through the language model.
+Args:
+prompt (str): The prompt template string.
+**kwargs: Keyword arguments to fill the prompt template.
+Returns:
+str: The model's response.
+"""
+prompt_template = PromptTemplate(template=prompt, input_variables=list
+chain = prompt_template | llm
+return chain.invoke(kwargs).content
+
+Breaking Down Complex Tasks
+Let's start with a complex task and break it down into subtasks. We'll use the
+example of analyzing a company's financial health.
+In [3]:
+
+complex_task = """
+Analyze the financial health of a company based on the following data:
+- Revenue: $10 million
+- Net Income: $2 million
+- Total Assets: $15 million
+- Total Liabilities: $7 million
+- Cash Flow from Operations: $3 million
+"""
+decomposition_prompt = """
+Break down the task of analyzing a company's financial health into 3 subtasks.
+Task: {task}
+Subtasks:
+1.
+"""
+subtasks = run_prompt(decomposition_prompt, task=complex_task)
+print(subtasks)
+### Subtask 1: Assess Profitability
+**Description:** Evaluate the company's profitability by analyzing key met
+rics such as profit margins and return on assets (ROA). This will involve
+calculating the net profit margin (Net Income / Revenue) and ROA (Net Inco
+me / Total Assets). The objective is to determine how effectively the comp
+any converts revenue into profit and how well it utilizes its assets to ge
+nerate income.
+### Subtask 2: Evaluate Liquidity and Solvency
+**Description:** Analyze the company's liquidity and solvency by calculati
+ng the current ratio and debt-to-equity ratio. The current ratio can be de
+rived from the company's cash flow from operations and total liabilities,
+while the debt-to-equity ratio (Total Liabilities / (Total Assets - Total
+Liabilities)) will provide insight into the company's financial leverage.
+This subtask aims to assess the company's ability to meet short-term oblig
+ations and understand the level of debt relative to equity.
+### Subtask 3: Examine Cash Flow Health
+**Description:** Review the company's cash flow from operations to determi
+ne its ability to generate cash from core business activities. This includ
+es analyzing the cash flow margin (Cash Flow from Operations / Revenue) an
+d comparing it to net income to assess the quality of earnings. The goal i
+s to understand how well the company is managing its cash flow and whether
+it can sustain operations and fund growth without relying heavily on exter
+nal financing.
+
+Chaining Subtasks in Prompts
+Now that we have our subtasks, let's create individual prompts for each and chain
+them together.
+
+In [4]:
+
+def analyze_profitability(revenue, net_income):
+"""Analyze the company's profitability.
+Args:
+revenue (float): Company's revenue.
+net_income (float): Company's net income.
+Returns:
+str: Analysis of the company's profitability.
+"""
+prompt = """
+Analyze the company's profitability based on the following data:
+- Revenue: ${revenue} million
+- Net Income: ${net_income} million
+
+Calculate the profit margin and provide a brief analysis of the company's p
+"""
+return run_prompt(prompt, revenue=revenue, net_income=net_income)
+def analyze_liquidity(total_assets, total_liabilities):
+"""Analyze the company's liquidity.
+Args:
+total_assets (float): Company's total assets.
+total_liabilities (float): Company's total liabilities.
+Returns:
+str: Analysis of the company's liquidity.
+"""
+prompt = """
+Analyze the company's liquidity based on the following data:
+- Total Assets: ${total_assets} million
+- Total Liabilities: ${total_liabilities} million
+
+Calculate the current ratio and provide a brief analysis of the company's l
+"""
+return run_prompt(prompt, total_assets=total_assets, total_liabilities
+def analyze_cash_flow(cash_flow):
+"""Analyze the company's cash flow.
+Args:
+cash_flow (float): Company's cash flow from operations.
+Returns:
+str: Analysis of the company's cash flow.
+"""
+prompt = """
+Analyze the company's cash flow based on the following data:
+- Cash Flow from Operations: ${cash_flow} million
+Provide a brief analysis of the company's cash flow health.
+"""
+return run_prompt(prompt, cash_flow=cash_flow)
+# Run the chained subtasks
+profitability_analysis = analyze_profitability(10, 2)
+liquidity_analysis = analyze_liquidity(15, 7)
+cash_flow_analysis = analyze_cash_flow(3)
+
+print("Profitability Analysis:\n", profitability_analysis)
+print("\nLiquidity Analysis:\n", liquidity_analysis)
+print("\nCash Flow Analysis:\n", cash_flow_analysis)
+Profitability Analysis:
+To analyze the company's profitability, we can calculate the profit margi
+n using the provided data. The profit margin is a financial metric that in
+dicates the percentage of revenue that has turned into profit. It is calcu
+lated using the following formula:
+\[
+\text{Profit Margin} = \left( \frac{\text{Net Income}}{\text{Revenue}} \ri
+ght) \times 100
+\]
+Given the values:
+- Revenue = $10 million
+- Net Income = $2 million
+Now, substituting the values into the formula:
+\[
+\text{Profit Margin} = \left( \frac{2,000,000}{10,000,000} \right) \times
+100
+\]
+Calculating this gives:
+\[
+\text{Profit Margin} = \left( 0.2 \right) \times 100 = 20\%
+\]
+### Analysis of the Company's Profitability
+A profit margin of 20% indicates that the company retains $0.20 as profit
+for every dollar of revenue generated. This is generally considered a stro
+ng profit margin, suggesting that the company is effectively managing its
+costs relative to its revenue.
+Here are some key points to consider regarding the company's profitability
+based on this profit margin:
+1. **Operational Efficiency**: A profit margin of 20% suggests that the co
+mpany may have good control over its operating expenses, which can include
+costs related to production, marketing, and administration.
+2. **Industry Comparison**: To further assess profitability, it would be b
+eneficial to compare this profit margin with industry averages. If the ind
+ustry average is lower, it indicates that the company is performing well c
+ompared to its peers.
+3. **Sustainability**: While a 20% profit margin is strong, it is essentia
+l to consider whether this level of profitability is sustainable in the lo
+ng term. Factors such as competitive pressures, changes in consumer deman
+d, and cost fluctuations can all impact future profitability.
+4. **Growth Potential**: The company should also evaluate how it can lever
+age its profitability for growth. This could involve reinvesting profits i
+nto new products, market expansion, or improving operational efficiencies.
+
+In conclusion, the company's 20% profit margin reflects a solid profitabil
+ity position, but continuous monitoring and strategic planning will be cri
+tical to maintaining and enhancing this performance.
+Liquidity Analysis:
+To analyze the company's liquidity, we can start by calculating the curre
+nt ratio. The current ratio is a financial metric that measures a company'
+s ability to cover its short-term liabilities with its short-term assets.
+However, since we don't have the specific values for current assets and cu
+rrent liabilities, we can derive some insights from the total assets and t
+otal liabilities provided.
+### Given Data:
+- Total Assets: $15 million
+- Total Liabilities: $7 million
+### Current Ratio Calculation:
+The current ratio is calculated using the formula:
+\[
+\text{Current Ratio} = \frac{\text{Current Assets}}{\text{Current Liabilit
+ies}}
+\]
+Since we do not have the specific values for current assets or current lia
+bilities, we can instead focus on total assets and total liabilities to ge
+t a sense of the company's overall financial health.
+### Analysis of Liquidity:
+1. **Debt-to-Asset Ratio**: This can provide insight into the proportion o
+f the company's assets that are financed by liabilities.
+\[
+\text{Debt-to-Asset Ratio} = \frac{\text{Total Liabilities}}{\text{Tota
+l Assets}} = \frac{7 \text{ million}}{15 \text{ million}} \approx 0.467
+\]
+This indicates that about 46.7% of the company's assets are financed th
+rough debt, which is a reasonable level but suggests that the company does
+carry some risk associated with its liabilities.
+2. **Equity Position**: To assess the company's equity position, we can ca
+lculate total equity:
+\[
+\text{Total Equity} = \text{Total Assets} - \text{Total Liabilities} =
+15 \text{ million} - 7 \text{ million} = 8 \text{ million}
+\]
+This suggests that the company has a solid equity base of $8 million, w
+hich indicates a relatively stable financial position.
+### Conclusion:
+While we lack specific current asset and current liability figures to comp
+ute the current ratio directly, the company's total assets and liabilities
+suggest a favorable liquidity position overall. With 46.7% of its assets f
+inanced by liabilities and a healthy equity cushion, the company appears t
+o be in a good position to meet its obligations.
+For a more detailed liquidity analysis, it would be beneficial to obtain t
+he current assets and current liabilities figures to calculate the current
+ratio directly. However, based on the available data, the company does not
+seem to be in immediate liquidity distress.
+
+Cash Flow Analysis:
+Based on the provided data, the company has a cash flow from operations o
+f $3 million. Here's a brief analysis of its cash flow health:
+1. **Positive Cash Flow from Operations**: A cash flow of $3 million indic
+ates that the company is generating sufficient cash from its core business
+activities. This is a positive sign, as it suggests that the company is ab
+le to cover its operating expenses and potentially reinvest in growth oppo
+rtunities.
+2. **Sustainability**: If this cash flow figure is consistent over time, i
+t could indicate a healthy and sustainable business model. Consistency in
+cash flow from operations is essential for long-term stability.
+3. **Comparison to Cash Needs**: To fully assess the cash flow health, it
+would be important to compare this figure against the company's cash needs
+for capital expenditures, debt servicing, and other financial obligations.
+If the cash flow from operations exceeds these needs, the company may be i
+n a strong position.
+4. **Operational Efficiency**: A strong operational cash flow can point to
+effective management and operational efficiency. It might be beneficial to
+analyze further metrics, such as operating margins and revenue growth, to
+gain deeper insights into operational performance.
+5. **Room for Improvement**: If the company has significant investments or
+is in a growth phase, it may need to evaluate whether $3 million is suffic
+ient to support its strategic goals. Additionally, assessing cash flow tre
+nds over multiple periods could provide insights into potential weaknesses
+or opportunities.
+In summary, while a $3 million cash flow from operations is a positive ind
+icator, a comprehensive evaluation against the company's financial obligat
+ions and historical performance is necessary to fully understand its cash
+flow health.
+
+Integrating Results
+Finally, let's integrate the results from our subtasks to provide an overall analysis of
+the company's financial health.
+In [5]:
+
+def integrate_results(profitability, liquidity, cash_flow):
+"""Integrate the results from subtasks to provide an overall analysis.
+Args:
+profitability (str): Profitability analysis.
+liquidity (str): Liquidity analysis.
+cash_flow (str): Cash flow analysis.
+
+Returns:
+str: Overall analysis of the company's financial health.
+"""
+prompt = """
+Based on the following analyses, provide an overall assessment of the compa
+Profitability Analysis:
+{profitability}
+
+Liquidity Analysis:
+{liquidity}
+Cash Flow Analysis:
+{cash_flow}
+
+Summarize the key points and give an overall evaluation of the company's fi
+"""
+return run_prompt(prompt, profitability=profitability, liquidity=liquidity
+
+overall_analysis = integrate_results(profitability_analysis, liquidity_analysis
+print("Overall Financial Health Analysis:\n", overall_analysis)
+Overall Financial Health Analysis:
+### Overall Assessment of the Company's Financial Health
+Based on the analyses of profitability, liquidity, and cash flow, here are
+the key points and an overall evaluation of the company's financial positi
+on:
+#### Profitability Analysis
+- **Profit Margin**: The company has a profit margin of 20%, indicating th
+at it retains $0.20 as profit for every dollar of revenue. This is general
+ly considered a strong performance.
+- **Operational Efficiency**: The profit margin suggests effective managem
+ent of operating expenses, positioning the company favorably within its in
+dustry.
+- **Sustainability Considerations**: While the current margin is robust, o
+ngoing monitoring is necessary to ensure that it remains sustainable amids
+t market fluctuations and competitive pressures.
+#### Liquidity Analysis
+- **Debt-to-Asset Ratio**: At approximately 46.7%, this ratio indicates th
+at nearly half of the company's assets are financed through debt. This lev
+el is manageable but does suggest some risk exposure due to reliance on bo
+rrowed capital.
+- **Total Equity**: The company has a solid equity base of $8 million, whi
+ch provides a cushion against liabilities and enhances financial stabilit
+y.
+- **Current Ratio**: While the exact current ratio could not be computed d
+ue to a lack of specific current assets and current liabilities data, the
+overall debt management indicates that the company is not in immediate liq
+uidity distress.
+#### Cash Flow Analysis
+- **Cash Flow from Operations**: A positive cash flow of $3 million from o
+perations suggests that the company is generating adequate cash from its c
+ore business activities, which is essential for covering operating expense
+s and potential reinvestment.
+- **Sustainability and Comparisons**: Consistency in this cash flow figure
+over time would be crucial for long-term stability. Further analysis again
+st the company's cash needs and historical performance could provide deepe
+r insights.
+### Overall Evaluation
+The company presents a **favorable financial position** characterized by s
+trong profitability, manageable liquidity levels, and positive operational
+cash flow. Here are the overall takeaways:
+1. **Strengths**: The 20% profit margin reflects effective cost management
+
+and operational efficiency. Additionally, a solid equity position indicate
+s a stable financial foundation.
+2. **Risks**: The reliance on debt financing (46.7% debt-to-assets) poses
+some risk, highlighting the importance of effective debt management and mo
+nitoring of interest obligations.
+3. **Opportunities**: The positive cash flow from operations provides the
+company with the ability to reinvest in growth and respond to market oppor
+tunities.
+4. **Recommendations**: Continuous monitoring of profitability, liquidity
+ratios, and cash flow trends is essential. Additionally, obtaining detaile
+d current asset and liability data would enhance liquidity analysis and al
+low for a more comprehensive financial assessment.
+In conclusion, while the company is currently in a good financial positio
+n, ongoing strategic planning and risk management will be vital to sustain
+ing its performance and navigating potential future challenges.
+
+

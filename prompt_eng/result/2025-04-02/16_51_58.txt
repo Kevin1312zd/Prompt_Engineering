@@ -1,0 +1,30 @@
+2025-04-02 16:51:58,916 - 16_51_58.txt - INFO - -------------------------start new experiment-------------------------------
+2025-04-02 16:53:51,315 - 16_51_58.txt - INFO - 
+2025-04-02 16:53:51,315 - 16_51_58.txt - INFO - 用户输入的原始prompt0是【 I want to query a certain material card in MSC Nastran BDF file. 】
+
+2025-04-02 16:53:51,316 - 16_51_58.txt - INFO - optimizer基于prompt0生成的多个提示词包括:
+
+2025-04-02 16:53:51,316 - 16_51_58.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 16:53:51,325 - 16_51_58.txt - INFO - 【 Prompt: "In the context of MSC Nastran BDF files, where material properties are defined using specific card formats like MAT1, MAT2, or MAT8: How do I query a material card by its MID (Material Identification Number)? Please include the exact syntax pattern to search for in the BDF file, and provide an example for a MAT1 card with MID=101."  
+Strategy：Contextual Augmentation with Domain-Specific Examples  
+
+**Rationale**:  
+1. Adds technical context about BDF structure/material card types (MAT1/MAT2/MAT8)  
+2. Specifies the critical identifier (MID) for unambiguous querying  
+3. Requests explicit syntax patterns and examples to ensure operational clarity  
+4. Mirrors Nastran's rigid formatting requirements through pattern-based instructions 
+】
+
+2025-04-02 16:53:51,325 - 16_51_58.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 16:53:51,325 - 16_51_58.txt - INFO - 【 Prompt: "Please provide the specific material ID or material type (e.g., MAT1, MAT2) you want to query in the MSC Nastran BDF file, along with the particular properties or format details you need to extract (e.g., Young's modulus, density, coordinate system). Specify whether you need syntax examples, parameter definitions, or location identification within the BDF structure."
+
+Strategy: Contextual Specification + Parameterization Framework  
+This combines domain-specific context (Nastran material cards) with structured parameter requests, implementing the "Five Ws" principle (What material, Which properties, How to present) for technical clarity. The prompt forces explicit declaration of 1) Material identification 2) Target parameters 3) Use-case context - three critical dimensions for effective BDF queries. 
+】
+
+2025-04-02 16:53:51,325 - 16_51_58.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 16:54:34,905 - 16_51_58.txt - INFO - 经过evaluator评估得到的最优提示词是【 Prompt: "In the context of MSC Nastran BDF files, where material properties are defined using specific card formats like MAT1, MAT2, or MAT8: How do I query a material card by its MID (Material Identification Number)? Please include the exact syntax pattern to search for in the BDF file, and provide an example for a MAT1 card with MID=101."  
+Strategy：Contextual Augmentation with Domain-Specific Examples  
+Analysis:（使用中文输出）分析最优提示词的优势  
+该提示词通过明确限定技术场景（MSC Nastran BDF文件）、列举具体卡片类型（MAT1/MAT2/MAT8）和核心标识符（MID），直接锚定用户需求。要求提供精确语法模式和MAT1示例，既符合Nastran格式的刚性特征，又通过实例化降低操作歧义。相较于第二个提示需要用户二次声明参数的交互模式，本提示通过预置技术上下文和结构化输出要求，实现单次交互闭环，更适配工程师快速定位技术细节的需求场景。 】
+

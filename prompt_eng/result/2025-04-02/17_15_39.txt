@@ -1,0 +1,25 @@
+2025-04-02 17:15:39,062 - 17_15_39.txt - INFO - -------------------------start new experiment-------------------------------
+2025-04-02 17:17:21,351 - 17_15_39.txt - INFO - 
+2025-04-02 17:17:21,352 - 17_15_39.txt - INFO - 用户输入的原始prompt0是【 I want to query a certain material card in MSC Nastran BDF file. 】
+
+2025-04-02 17:17:21,352 - 17_15_39.txt - INFO - optimizer基于prompt0生成的多个提示词包括:
+
+2025-04-02 17:17:21,352 - 17_15_39.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:17:21,362 - 17_15_39.txt - INFO - 【 Prompt:  
+"Identify and extract the material card with ID {material_id} from the provided MSC Nastran BDF file. Include all associated properties: {properties}. Format the output as {output_format}. For BDF syntax clarity, reference these examples: {bdf_specifics}."  
+
+Strategy：Structured prompting with parameterized input variables 
+】
+
+2025-04-02 17:17:21,362 - 17_15_39.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:17:21,362 - 17_15_39.txt - INFO - 【 Prompt:  
+"Extract the material card with ID {material_id} from the provided MSC Nastran BDF file. Include all relevant properties: {property1}, {property2}, and {property3}. Format the output as a structured table with columns: Parameter, Value, Units. If the material ID is not found, explicitly state this and suggest valid alternatives from the file."  
+
+Strategy：Structured Input Variables (template with parameterized requirements) 
+】
+
+2025-04-02 17:17:21,363 - 17_15_39.txt - INFO - ——————————————————————————————————————————————————————————————————————————————————————————————————
+2025-04-02 17:18:05,827 - 17_15_39.txt - INFO - 经过evaluator评估得到的最优提示词是【 Prompt:Extract the material card with ID {material_id} from the provided MSC Nastran BDF file. Include all relevant properties: {property1}, {property2}, and {property3}. Format the output as a structured table with columns: Parameter, Value, Units. If the material ID is not found, explicitly state this and suggest valid alternatives from the file.  
+Strategy：Structured Input Variables (template with parameterized requirements)  
+Analysis:第二个提示词更优，因其明确指定了表格结构（参数/值/单位）增强了数据可读性，强制要求异常处理机制（未找到ID时提示替代方案）提升了实用性，且通过列举具体属性参数（property1/2/3）降低了指令模糊性。结构化输入变量模板设计使需求边界更清晰，符合工程场景的精确性要求。 】
+
